@@ -4,25 +4,25 @@ import player as pl
 def chargen():
     name = input("Choose name: ")
     level = 1
-    stat_points = 72
+    max_points = 72
     exp = 0
     stat_check = 0
     spent_points = 0
     main_stats = {"STR": 0, "DEX": 0, "CON": 0, "INT": 0, "WIS": 0, "CHA": 0}
-
+    # Loop asignar stats
     while stat_check == 0:
-        print("Maximum Points to spend: " + str(stat_points))
+        print("Maximum Points to spend: " + str(max_points))
         spent_points = 0
         for i in main_stats:
             main_stats[i] = int(input(i+" Choose amount:"))
             spent_points += main_stats[i]
-            print("leftover points: " + str(stat_points-spent_points))
+            print("leftover points: " + str(max_points-spent_points))
 
         print(main_stats)
-        if stat_points >= spent_points:
+        if max_points >= spent_points:
             print("spent points: " + str(spent_points))
-            print("stat points: " + str(stat_points))
-            print("leftover points: " + str(stat_points-spent_points))
+            print("stat points: " + str(max_points))
+            print("leftover points: " + str(max_points-spent_points))
             stat_check = 1
 
     hp = 10 + main_stats["CON"]//2
