@@ -24,7 +24,7 @@ def chargen():
         print("Minimum value is 1, Maximum value is 18")
         print("")
         for i in main_stats:
-            print(i + ": " + str(main_stats[i]))
+            print(i + ": " + str(main_stats[i]) + " | Modifier: " + str(main_stats[i]//2-5))
         input_stat = input("Write stat or 'Done' for exit: ")
         input_stat = input_stat.upper()
         if input_stat == "DONE":
