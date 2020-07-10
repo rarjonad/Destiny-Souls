@@ -9,6 +9,14 @@ def clear():
         os.system('clear')
 
 
+def calculate_stat_modifiers(stats):
+    modifiers = {}
+    for i in stats:
+        mod = stats[i]//2-5
+        modifiers.update({i: mod})
+    return modifiers
+
+
 def chargen():
     name = input("Choose name: ")
     level = 1
@@ -17,14 +25,15 @@ def chargen():
     exp = 0
     stat_check = 0
     main_stats = {"STR": 1, "DEX": 1, "CON": 1, "INT": 1, "WIS": 1, "CHA": 1}
-    # Loop asignar stats
+    # Loop stat asign
     while stat_check == 0:
+        stat_modifiers = calculate_stat_modifiers(main_stats)
         clear()
         print("Character generation\t\t Points left to spend: " + str(points_left))
         print("Minimum value is 1, Maximum value is 18")
         print("")
         for i in main_stats:
-            print(i + ": " + str(main_stats[i]) + " | Modifier: " + str(main_stats[i]//2-5))
+            print(i + ": " + str(main_stats[i]) + " | Modifier: " + str(stat_modifiers[i]))
         input_stat = input("Write stat or 'Done' for exit: ")
         input_stat = input_stat.upper()
         if input_stat == "DONE":
@@ -55,10 +64,11 @@ def chargen():
     mp = 20 + main_stats["INT"]//2
     print("hp: " + str(hp))
     print("mp: " + str(mp))
-    player = pl.Player(name, hp, mp, level, exp, main_stats)
+    player = pl.Player(name, hp, mp, level, exp, main_stats, stat_modifiers)
     print(player)
     print(dir(player))
     print(player.stats)
+    print(player.stats_modifiers)
     return player
 
 
