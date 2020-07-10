@@ -1,38 +1,74 @@
 import player as pl
+import os
+
+
+def clear():
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
+
+
+def calculate_stat_modifiers(stats):
+    modifiers = {}
+    for i in stats:
+        mod = stats[i]//2-5
+        modifiers.update({i: mod})
+    return modifiers
 
 
 def chargen():
     name = input("Choose name: ")
     level = 1
     max_points = 72
+    points_left = max_points
     exp = 0
     stat_check = 0
-    spent_points = 0
-    main_stats = {"STR": 0, "DEX": 0, "CON": 0, "INT": 0, "WIS": 0, "CHA": 0}
-    # Loop asignar stats
+    main_stats = {"STR": 1, "DEX": 1, "CON": 1, "INT": 1, "WIS": 1, "CHA": 1}
+    # Loop stat asign
     while stat_check == 0:
-        print("Maximum Points to spend: " + str(max_points))
-        spent_points = 0
+        stat_modifiers = calculate_stat_modifiers(main_stats)
+        clear()
+        print("Character generation\t\t Points left to spend: " + str(points_left))
+        print("Minimum value is 1, Maximum value is 18")
+        print("")
         for i in main_stats:
-            main_stats[i] = int(input(i+" Choose amount:"))
-            spent_points += main_stats[i]
-            print("leftover points: " + str(max_points-spent_points))
-
-        print(main_stats)
-        if max_points >= spent_points:
-            print("spent points: " + str(spent_points))
-            print("stat points: " + str(max_points))
-            print("leftover points: " + str(max_points-spent_points))
-            stat_check = 1
+            print(i + ": " + str(main_stats[i]) + " | Modifier: " + str(stat_modifiers[i]))
+        input_stat = input("Write stat or 'Done' for exit: ")
+        input_stat = input_stat.upper()
+        if input_stat == "DONE":
+            if (points_left > 0):
+                print("You still have " + str(points_left) + " points left")
+                point_confirm = input("Finish stat asignment? [y/n] ")
+                if point_confirm.lower() == "y":
+                    stat_check = 1
+            elif (points_left < 0):
+                print("Spent points ("+str(points_left)+") lower than 0")
+                input(">...")
+            else:
+                stat_check = 1
+        else:
+            chosen_stat = main_stats.get(input_stat, 0)
+            if chosen_stat == 0:
+                pass
+            else:
+                stat_increase = int(input("Choose points to assign: "))
+                if (stat_increase <= 0) or (stat_increase > 18):
+                    print("Value must be between 1 and 18")
+                    input(">...")
+                else:
+                    main_stats[input_stat] = stat_increase
+                    points_left = max_points - sum(main_stats.values())
 
     hp = 10 + main_stats["CON"]//2
     mp = 20 + main_stats["INT"]//2
     print("hp: " + str(hp))
     print("mp: " + str(mp))
-    player = pl.Player(name, hp, mp, level, exp, main_stats)
+    player = pl.Player(name, hp, mp, level, exp, main_stats, stat_modifiers)
     print(player)
     print(dir(player))
     print(player.stats)
+    print(player.stats_modifiers)
     return player
 
 
