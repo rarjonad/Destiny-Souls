@@ -1,0 +1,77 @@
+{
+    "skills":
+    [
+        {
+            "id" : "Athletics",
+            "stat" : "STR"
+        },
+        {
+            "id" : "Acrobatics",
+            "stat" : "DEX"
+        },
+        {
+            "id" : "Sleight_of_hand",
+            "stat" : "DEX"
+        },
+        {
+            "id" : "Stealth",
+            "stat" : "DEX"
+        },
+        {
+            "id" : "Arcana",
+            "stat" : "INT"
+        },
+        {
+            "id" : "History",
+            "stat" : "INT"
+        },
+        {
+            "id" : "Investigation",
+            "stat" : "INT"
+        },
+        {
+            "id" : "Nature",
+            "stat" : "INT"
+        },
+        {
+            "id" : "Religion",
+            "stat" : "INT"
+        },
+        {
+            "id" : "Animal_handling",
+            "stat" : "WIS"
+        },
+        {
+            "id" : "Insight",
+            "stat" : "WIS"
+        },
+        {
+            "id" : "Medicine",
+            "stat" : "WIS"
+        },
+        {
+            "id" : "Perception",
+            "stat" : "WIS"
+        },
+        {
+            "id" : "Survival",
+            "stat" : "WIS"
+        },
+        {
+            "id" : "Deception",
+            "stat" : "CHA"
+        },
+        {
+            "id" : "Intimidation",
+            "stat" : "CHA"
+        },
+        {
+            "id" : "Perfomance",
+            "stat" : "CHA"
+        },
+        {
+            "id" : "Persuasion",
+            "stat" : "CHA"
+        }
+    ]
+}
