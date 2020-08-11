@@ -1,5 +1,6 @@
 import player as pl
 import os
+import json
 
 
 def clear():
@@ -12,8 +13,8 @@ def clear():
 def calculate_stat_modifiers(stats):
     modifiers = {}
     for i in stats:
-        mod = stats[i]//2-5
-        modifiers.update({i: mod})
+        mod = stats[i] // 2 - 5
+        modifiers.update({i + '_mod': mod})
     return modifiers
 
 
@@ -25,15 +26,15 @@ def chargen():
     exp = 0
     stat_check = 0
     main_stats = {"STR": 1, "DEX": 1, "CON": 1, "INT": 1, "WIS": 1, "CHA": 1}
-    # Loop stat asign
+    # Loop stat assign
     while stat_check == 0:
         stat_modifiers = calculate_stat_modifiers(main_stats)
         clear()
         print("Character generation\t\t Points left to spend: " + str(points_left))
         print("Minimum value is 1, Maximum value is 18")
-        print("")
+        print()
         for i in main_stats:
-            print(i + ": " + str(main_stats[i]) + " | Modifier: " + str(stat_modifiers[i]))
+            print(i + ": " + str(main_stats[i]) + " | Modifier: " + str(stat_modifiers[i + '_mod']))
         input_stat = input("Write stat or 'Done' for exit: ")
         input_stat = input_stat.upper()
         if input_stat == "DONE":
@@ -43,7 +44,7 @@ def chargen():
                 if point_confirm.lower() == "y":
                     stat_check = 1
             elif (points_left < 0):
-                print("Spent points ("+str(points_left)+") lower than 0")
+                print("Spent points (" + str(points_left) + ") lower than 0")
                 input(">...")
             else:
                 stat_check = 1
@@ -52,23 +53,40 @@ def chargen():
             if chosen_stat == 0:
                 pass
             else:
-                stat_increase = int(input("Choose points to assign: "))
-                if (stat_increase <= 0) or (stat_increase > 18):
-                    print("Value must be between 1 and 18")
-                    input(">...")
+                try:
+                    stat_increase = int(input("Choose points to assign: "))
+                except ValueError:
+                    print("Write a number between 1 and 18")
                 else:
-                    main_stats[input_stat] = stat_increase
-                    points_left = max_points - sum(main_stats.values())
+                    if (stat_increase <= 0) or (stat_increase > 18):
+                        print("Value must be between 1 and 18")
+                        input(">...")
+                    else:
+                        main_stats[input_stat] = stat_increase
+                        points_left = max_points - sum(main_stats.values())
 
-    hp = 10 + main_stats["CON"]//2
-    mp = 20 + main_stats["INT"]//2
+    hp = 10 + stat_modifiers["CON_mod"]
+    mp = 20 + stat_modifiers["INT_mod"]
     print("hp: " + str(hp))
     print("mp: " + str(mp))
-    player = pl.Player(name, hp, mp, level, exp, main_stats, stat_modifiers)
+    with open('data/player_skills.json') as skills_file:
+        skill_list = json.load(skills_file)
+    player = pl.Player(name, hp, mp, level, exp, main_stats, stat_modifiers, skill_list)
     print(player)
     print(dir(player))
     print(player.stats)
     print(player.stats_modifiers)
+    print("\nSkills block\n")
+    # Skills
+    skill_check = 0
+    skill_points_max = 10 + stat_modifiers["INT_mod"] * 2
+    points = 2
+    for i in player.skills:
+        print(player.skills[i])
+
+    # while skill_check == 0:
+    #    for i in skills:
+    #        print(i + ": \t" + str(skills[i]["points"]) + " (" + str(skills[i]["stat"]) + ")")
     return player
 
 
@@ -102,7 +120,11 @@ def main_menu():
         print("\t\t 3- Options")
         print("\t\t 4- Exit")
         print()
-        chosen_option = int(input("Choose: "))
-        exec_func = main_switcher.get(chosen_option, 0)
-        if exec_func != 0:
-            return exec_func()
+        try:
+            chosen_option = int(input("Choose: "))
+        except ValueError:
+            pass
+        else:
+            exec_menu = main_switcher.get(chosen_option, 0)
+            if exec_menu != 0:
+                exec_menu()

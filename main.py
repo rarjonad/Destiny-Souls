@@ -13,6 +13,5 @@ def clear():
         os.system('clear')
 
 
-# import pygame
 clear()
 mn.main_menu()
