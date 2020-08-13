@@ -19,9 +19,9 @@ def calculate_stat_modifiers(stats):
 
 
 def calculate_skill_value(skill, modifier):
-    print('func')
     print(skill)
     skill['value'] = skill['points'] + modifier
+
 
 def chargen():
     name = input("Choose name: ")
@@ -119,7 +119,6 @@ def chargen():
                     print("Skill NOT found")
                 else:
                     print("Skill found")
-                    print(skill_list['skills'][chosen_skill])
                     skill_found = skill_list['skills'][chosen_skill]
                     try:
                         skill_points_assign = int(input("How many points to assign? "))
