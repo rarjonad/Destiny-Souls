@@ -14,9 +14,14 @@ def calculate_stat_modifiers(stats):
     modifiers = {}
     for i in stats:
         mod = stats[i] // 2 - 5
-        modifiers.update({i + '_mod': mod})
+        modifiers.update({i: mod})
     return modifiers
 
+
+def calculate_skill_value(skill, modifier):
+    print('func')
+    print(skill)
+    skill['value'] = skill['points'] + modifier
 
 def chargen():
     name = input("Choose name: ")
@@ -34,7 +39,7 @@ def chargen():
         print("Minimum value is 1, Maximum value is 18")
         print()
         for i in main_stats:
-            print(i + ": " + str(main_stats[i]) + " | Modifier: " + str(stat_modifiers[i + '_mod']))
+            print(i + ": " + str(main_stats[i]) + " | Modifier: " + str(stat_modifiers[i]))
         input_stat = input("Write stat or 'Done' for exit: ")
         input_stat = input_stat.upper()
         if input_stat == "DONE":
@@ -65,25 +70,76 @@ def chargen():
                         main_stats[input_stat] = stat_increase
                         points_left = max_points - sum(main_stats.values())
 
-    hp = 10 + stat_modifiers["CON_mod"]
-    mp = 20 + stat_modifiers["INT_mod"]
+    hp = 10 + stat_modifiers["CON"]
+    mp = 20 + stat_modifiers["INT"]
     print("hp: " + str(hp))
     print("mp: " + str(mp))
+    # SKILL BLOCK
+    print("\nSkills block\n")
     with open('data/player_skills.json') as skills_file:
         skill_list = json.load(skills_file)
+    skill_count = 0
+    for i in skill_list['skills']:  # Add point field to every skill for assigned points
+        new_field = {'points': 0, 'value': stat_modifiers[i['stat']]}
+        skill_list['skills'][skill_count].update(new_field)
+        skill_count += 1
+    skill_check = 0
+    skill_points_max = 10 + stat_modifiers["INT"]
+    skill_points_left = skill_points_max
+    while skill_check == 0:  # Skill point assign loop
+        count = 0
+        print('Limit points: ' + str(skill_points_max) + ' Current left: ' + str(skill_points_left))
+        print('\tSkill - Stat - Value - Points - Stat Modifier')
+        print()
+        for i in skill_list['skills']:
+            print(str(count) + ') ' + i['id'] + ' - ' + i['stat'] + ' - ' + str(i['value']) + ' - ' + str(i['points']) + ' - ' + str(stat_modifiers[i['stat']]))
+            count += 1
+        print()
+        chosen_skill = input("Choose Skill by number (empty to finish): ")
+        if chosen_skill == '':
+            if skill_points_left < 0:
+                print('Over point limit. Reassign your skills')
+                input('>...')
+            elif skill_points_left > 0:
+                print('Below point limit')
+                skill_exit = input('Finish skill assign? [y/n]')
+                if skill_exit.lower() == "y":
+                    skill_check = 1
+            else:
+                skill_check = 1
+        else:
+            try:
+                chosen_skill = int(chosen_skill)
+            except ValueError:
+                pass
+            else:
+                try:
+                    skill_list['skills'][chosen_skill]
+                except IndexError:
+                    print("Skill NOT found")
+                else:
+                    print("Skill found")
+                    print(skill_list['skills'][chosen_skill])
+                    skill_found = skill_list['skills'][chosen_skill]
+                    try:
+                        skill_points_assign = int(input("How many points to assign? "))
+                    except ValueError:
+                        pass
+                    else:
+                        skill_found['points'] = skill_points_assign
+                        skill_found = calculate_skill_value(skill_found, stat_modifiers[skill_found['stat']])
+                        skill_points_left -= skill_points_assign
+
     player = pl.Player(name, hp, mp, level, exp, main_stats, stat_modifiers, skill_list)
+    print("\nPlayer data\n")
     print(player)
     print(dir(player))
     print(player.stats)
     print(player.stats_modifiers)
-    print("\nSkills block\n")
+
     # Skills
-    skill_check = 0
-    skill_points_max = 10 + stat_modifiers["INT_mod"] * 2
-    points = 2
     for i in player.skills:
         print(player.skills[i])
-
     # while skill_check == 0:
     #    for i in skills:
     #        print(i + ": \t" + str(skills[i]["points"]) + " (" + str(skills[i]["stat"]) + ")")
