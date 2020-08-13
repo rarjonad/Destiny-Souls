@@ -9,7 +9,7 @@ class Player():
         self.stats_modifiers = modifiers
         self.skills = {}
         for i in skill_list['skills']:
-            skill_item = {i['id']: Skill(i['id'], i['stat'], i['points'], self.stats_modifiers[i['stat']])}
+            skill_item = {i['id']: Skill(i['id'], i['stat'], i['points'], i['value'], self.stats_modifiers[i['stat']])}
             self.skills.update(skill_item)
 
     def __str__(self):
@@ -17,12 +17,12 @@ class Player():
 
 
 class Skill():
-    def __init__(self, name, stat, points, stat_modifier):
+    def __init__(self, name, stat, points, value, stat_modifier):
         self.name = name
         self.stat = stat
         self.points = points
         self.modifier = stat_modifier
-        self.value = self.modifier + self.points
+        self.value = value
 
     def __str__(self):
         return "Skill Object: " + self.name + " - " + str(self.value) + " - " + str(self.points) + " - " + self.stat + " - " + str(self.modifier)
