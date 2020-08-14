@@ -23,6 +23,23 @@ def calculate_skill_value(skill, modifier):
     skill['value'] = skill['points'] + modifier
 
 
+def menu_confirm(check_parameter):
+    if check_parameter < 0:
+        print('You have assigned more points than the maximum allowed.')
+        input('>...')
+        menu_check = 0
+    elif check_parameter > 0:
+        print('You still have points left to assign')
+        skill_exit = input('Finish? [y/n] ')
+        if skill_exit.lower() == "y":
+            menu_check = 1
+        else:
+            menu_check = 0
+    else:
+        menu_check = 1
+    return menu_check
+
+
 def stat_assign():
     max_points = 72
     points_left = max_points
@@ -40,16 +57,7 @@ def stat_assign():
         input_stat = input("Write stat or 'Done' for exit: ")
         input_stat = input_stat.upper()
         if input_stat == "DONE":
-            if (points_left > 0):
-                print("You still have " + str(points_left) + " points left")
-                point_confirm = input("Finish stat asignment? [y/n] ")
-                if point_confirm.lower() == "y":
-                    stat_check = 1
-            elif (points_left < 0):
-                print("Spent points (" + str(points_left) + ") lower than 0")
-                input(">...")
-            else:
-                stat_check = 1
+            stat_check = menu_confirm(points_left)
         else:
             chosen_stat = main_stats.get(input_stat, 0)
             if chosen_stat == 0:
@@ -75,7 +83,7 @@ def skill_assign(stat_modifiers):
     with open('data/player_skills.json') as skills_file:
         skill_list = json.load(skills_file)
     skill_count = 0
-    for i in skill_list['skills']:  # Add point field to every skill for assigned points
+    for i in skill_list['skills']:  # Add point and value field to every skill for assigned points
         new_field = {'points': 0, 'value': stat_modifiers[i['stat']]}
         skill_list['skills'][skill_count].update(new_field)
         skill_count += 1
@@ -93,16 +101,7 @@ def skill_assign(stat_modifiers):
         print()
         chosen_skill = input("Choose Skill by number (empty to finish): ")
         if chosen_skill == '':
-            if skill_points_left < 0:
-                print('Over point limit. Reassign your skills')
-                input('>...')
-            elif skill_points_left > 0:
-                print('Below point limit')
-                skill_exit = input('Finish skill assign? [y/n] ')
-                if skill_exit.lower() == "y":
-                    skill_check = 1
-            else:
-                skill_check = 1
+            skill_check = menu_confirm(skill_points_left)
         else:
             try:
                 chosen_skill = int(chosen_skill)
@@ -121,14 +120,21 @@ def skill_assign(stat_modifiers):
                     except ValueError:
                         pass
                     else:
-                        skill_found['points'] = skill_points_assign
-                        skill_found = calculate_skill_value(skill_found, stat_modifiers[skill_found['stat']])
-                        skill_points_left -= skill_points_assign
+                        if skill_points_assign >= 0:
+                            skill_points_difference = skill_points_assign - skill_found['points']
+                            skill_found['points'] = skill_points_assign
+                            skill_found = calculate_skill_value(skill_found, stat_modifiers[skill_found['stat']])
+                            skill_points_left -= skill_points_difference
+                        else:
+                            print("No negative numbers")
+                            input(">...")
     return skill_list
 
 
 def chargen():
     name = input("Choose name: ")
+    # Menu for all chargen options
+    # Generic menu confirmation function
     main_stats, stat_modifiers = stat_assign()  # Get main stats
     skill_list = skill_assign(stat_modifiers)  # Get Skills
     level = 1
@@ -137,6 +143,10 @@ def chargen():
     mp = 20 + stat_modifiers["INT"]
     print("hp: " + str(hp))
     print("mp: " + str(mp))
+    # Add inventory
+    # Add Spells
+    # Add Perks/Quirks?
+    # Add Abilities?
     player = pl.Player(name, hp, mp, level, exp, main_stats, stat_modifiers, skill_list)
     print("\nPlayer data\n")
     print(player)
