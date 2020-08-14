@@ -23,12 +23,9 @@ def calculate_skill_value(skill, modifier):
     skill['value'] = skill['points'] + modifier
 
 
-def chargen():
-    name = input("Choose name: ")
-    level = 1
+def stat_assign():
     max_points = 72
     points_left = max_points
-    exp = 0
     stat_check = 0
     main_stats = {"STR": 1, "DEX": 1, "CON": 1, "INT": 1, "WIS": 1, "CHA": 1}
     # Loop stat assign
@@ -69,11 +66,10 @@ def chargen():
                     else:
                         main_stats[input_stat] = stat_increase
                         points_left = max_points - sum(main_stats.values())
+    return main_stats, stat_modifiers
 
-    hp = 10 + stat_modifiers["CON"]
-    mp = 20 + stat_modifiers["INT"]
-    print("hp: " + str(hp))
-    print("mp: " + str(mp))
+
+def skill_assign(stat_modifiers):
     # SKILL BLOCK
     print("\nSkills block\n")
     with open('data/player_skills.json') as skills_file:
@@ -102,7 +98,7 @@ def chargen():
                 input('>...')
             elif skill_points_left > 0:
                 print('Below point limit')
-                skill_exit = input('Finish skill assign? [y/n]')
+                skill_exit = input('Finish skill assign? [y/n] ')
                 if skill_exit.lower() == "y":
                     skill_check = 1
             else:
@@ -128,20 +124,27 @@ def chargen():
                         skill_found['points'] = skill_points_assign
                         skill_found = calculate_skill_value(skill_found, stat_modifiers[skill_found['stat']])
                         skill_points_left -= skill_points_assign
+    return skill_list
 
+
+def chargen():
+    name = input("Choose name: ")
+    main_stats, stat_modifiers = stat_assign()  # Get main stats
+    skill_list = skill_assign(stat_modifiers)  # Get Skills
+    level = 1
+    exp = 0
+    hp = 10 + stat_modifiers["CON"]
+    mp = 20 + stat_modifiers["INT"]
+    print("hp: " + str(hp))
+    print("mp: " + str(mp))
     player = pl.Player(name, hp, mp, level, exp, main_stats, stat_modifiers, skill_list)
     print("\nPlayer data\n")
     print(player)
     print(dir(player))
     print(player.stats)
     print(player.stats_modifiers)
-
-    # Skills
     for i in player.skills:
         print(player.skills[i])
-    # while skill_check == 0:
-    #    for i in skills:
-    #        print(i + ": \t" + str(skills[i]["points"]) + " (" + str(skills[i]["stat"]) + ")")
     return player
 
 
