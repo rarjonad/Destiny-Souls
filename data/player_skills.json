@@ -7,15 +7,15 @@
         },
         {
             "id" : "Acrobatics",
-            "stat" : "DEX"
+            "stat" : "AGI"
         },
         {
             "id" : "Sleight_of_hand",
-            "stat" : "DEX"
+            "stat" : "AGI"
         },
         {
             "id" : "Stealth",
-            "stat" : "DEX"
+            "stat" : "AGI"
         },
         {
             "id" : "Arcana",
@@ -39,23 +39,23 @@
         },
         {
             "id" : "Animal_handling",
-            "stat" : "WIS"
+            "stat" : "SPI"
         },
         {
             "id" : "Insight",
-            "stat" : "WIS"
+            "stat" : "SPI"
         },
         {
             "id" : "Medicine",
-            "stat" : "WIS"
+            "stat" : "SPI"
         },
         {
             "id" : "Perception",
-            "stat" : "WIS"
+            "stat" : "SPI"
         },
         {
             "id" : "Survival",
-            "stat" : "WIS"
+            "stat" : "SPI"
         },
         {
             "id" : "Deception",

@@ -42,7 +42,7 @@ def menu_confirm(check_parameter):
 
 def assign_stats(pre_stats):
     if pre_stats == 0:
-        main_stats = {"STR": 1, "DEX": 1, "CON": 1, "INT": 1, "WIS": 1, "CHA": 1}
+        main_stats = {"STR": 1, "AGI": 1, "VIG": 1, "INT": 1, "SPI": 1, "CHA": 1}
     else:
         main_stats = pre_stats
     max_points = 72
@@ -176,7 +176,7 @@ def chargen():
                     main_stats, stat_modifiers = exec_menu(main_stats)
                     level = 1
                     exp = 0
-                    hp = 10 + stat_modifiers["CON"]
+                    hp = 10 + stat_modifiers["VIG"]
                     mp = 20 + stat_modifiers["INT"]
                     print("hp: " + str(hp))
                     print("mp: " + str(mp))
@@ -197,7 +197,7 @@ def chargen():
                 elif chosen_option == 4:
                     pass  # TODO
                 elif chosen_option == 5:
-                    if main_stats == 0 | 'points' not in skill_list['skills'][0]:
+                    if main_stats == 0 or 'points' not in skill_list['skills'][0]:
                         print("You haven't set up your stats or skills")
                         input('>...')
                     else:
