@@ -42,10 +42,11 @@ def menu_confirm(check_parameter):
 
 def assign_stats(pre_stats):
     if pre_stats == 0:
-        main_stats = {"STR": 1, "DEX": 1, "CON": 1, "INT": 1, "WIS": 1, "CHA": 1}
+        with open('data/player/player_main_stats.json') as stats_file:
+            main_stats = json.load(stats_file)
     else:
         main_stats = pre_stats
-    max_points = 72
+    max_points = len(main_stats) * 10 + len(main_stats)
     points_left = max_points - sum(main_stats.values())
     stat_check = 0
     # Loop stat assign
@@ -155,7 +156,7 @@ def chargen():
     chargen_check = 0
     name = input("Choose name: ")
     main_stats = 0  # def var so we can pass stats before player assigns them
-    with open('data/player_skills.json') as skills_file:  # same as above with skills
+    with open('data/player/player_skills.json') as skills_file:  # same as above with skills
         skill_list = json.load(skills_file)
 
     while chargen_check == 0:
@@ -176,7 +177,7 @@ def chargen():
                     main_stats, stat_modifiers = exec_menu(main_stats)
                     level = 1
                     exp = 0
-                    hp = 10 + stat_modifiers["CON"]
+                    hp = 10 + stat_modifiers["VIG"]
                     mp = 20 + stat_modifiers["INT"]
                     print("hp: " + str(hp))
                     print("mp: " + str(mp))
@@ -197,7 +198,7 @@ def chargen():
                 elif chosen_option == 4:
                     pass  # TODO
                 elif chosen_option == 5:
-                    if main_stats == 0 | 'points' not in skill_list['skills'][0]:
+                    if main_stats == 0 or 'points' not in skill_list['skills'][0]:
                         print("You haven't set up your stats or skills")
                         input('>...')
                     else:
