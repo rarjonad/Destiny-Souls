@@ -42,7 +42,7 @@ def menu_confirm(check_parameter):
 
 def assign_stats(pre_stats):
     if pre_stats == 0:
-        with open('data/player/player_main_stats.json') as stats_file:  # same as above with skills
+        with open('data/player/player_main_stats.json') as stats_file:
             main_stats = json.load(stats_file)
     else:
         main_stats = pre_stats
