@@ -18,24 +18,24 @@
             "stat" : "AGI"
         },
         {
-            "id" : "Arcana",
-            "stat" : "INT"
-        },
-        {
-            "id" : "History",
-            "stat" : "INT"
-        },
-        {
             "id" : "Investigation",
             "stat" : "INT"
         },
         {
-            "id" : "Nature",
+            "id" : "Medicine",
             "stat" : "INT"
         },
         {
-            "id" : "Religion",
+            "id" : "Sorcery",
             "stat" : "INT"
+        },
+        {
+            "id" : "Nature",
+            "stat" : "SPI"
+        },
+        {
+            "id" : "Religion",
+            "stat" : "SPI"
         },
         {
             "id" : "Animal_handling",
@@ -46,15 +46,15 @@
             "stat" : "SPI"
         },
         {
-            "id" : "Medicine",
-            "stat" : "SPI"
-        },
-        {
             "id" : "Perception",
             "stat" : "SPI"
         },
         {
             "id" : "Survival",
+            "stat" : "SPI"
+        },
+        {
+            "id" : "Theurgy",
             "stat" : "SPI"
         },
         {
